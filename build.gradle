@@ -7,6 +7,70 @@ apply plugin: 'signing'
 
 sourceCompatibility = 1.5
 
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'ImagizerClient'
+                packaging 'jar'
+                description 'The official Java client for the Imagizer Media Engine'
+                url 'https://github.com/Nventify/ImagizerJava'
+
+                scm {
+                    connection 'scm:git:git://github.com/Nventify/ImagizerJava.git'
+                    developerConnection 'scm:git:git@github.com:Nventify/ImagizerJava.git'
+                    url 'https://github.com/Nventify/ImagizerJava'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'nibty'
+                        name 'Nicholas Pettas'
+                        email 'nick@nventify.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
 repositories {
     mavenCentral()
 }
