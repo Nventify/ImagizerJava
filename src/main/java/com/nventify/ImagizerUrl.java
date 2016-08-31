@@ -1,5 +1,6 @@
 package com.nventify;
 
+import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -12,12 +13,18 @@ public class ImagizerUrl {
     private String path;
     private Map<String, Object> params = new TreeMap<String, Object>();
 
+    /* the default device pixel density */
+    private Double dpr;
+
+    /* the default image quality compression to use */
+    private Integer quality;
+
     /**
      * Construct Imagizer URL
      *
-     * @param host the hostname of the Imagizer instance
+     * @param host     the hostname of the Imagizer instance
      * @param useHttps whether to use https or not
-     * @param path the path of the image
+     * @param path     the path of the image
      */
     public ImagizerUrl(String host, Boolean useHttps, String path) {
         this.host = host;
@@ -28,10 +35,10 @@ public class ImagizerUrl {
     /**
      * Construct Imagizer URL
      *
-     * @param host the Hostname of the Imagizer instance
+     * @param host     the Hostname of the Imagizer instance
      * @param useHttps whether to use https or not
-     * @param path the path of the image
-     * @param params the parameters to add to the url
+     * @param path     the path of the image
+     * @param params   the parameters to add to the url
      */
     public ImagizerUrl(String host, Boolean useHttps, String path, Map<String, Object> params) {
         this.host = host;
@@ -43,11 +50,23 @@ public class ImagizerUrl {
     /**
      * Returns Imagizer URL with added parameter
      *
-     * @param key the key of the parameter to add
+     * @param key   the key of the parameter to add
      * @param value the value of the parameter to add
      * @return ImagizerUrl
      */
-    public ImagizerUrl addParam(String key, Integer value) {
+    public ImagizerUrl addParam(String key, int value) {
+        params.put(key, value);
+        return this;
+    }
+
+    /**
+     * Returns Imagizer URL with added parameter
+     *
+     * @param key   the key of the parameter to add
+     * @param value the value of the parameter to add
+     * @return ImagizerUrl
+     */
+    public ImagizerUrl addParam(String key, String value) {
         params.put(key, value);
 
         return this;
@@ -56,11 +75,11 @@ public class ImagizerUrl {
     /**
      * Returns Imagizer URL with added parameter
      *
-     * @param key the key of the parameter to add
+     * @param key   the key of the parameter to add
      * @param value the value of the parameter to add
      * @return ImagizerUrl
      */
-    public ImagizerUrl addParam(String key, String value) {
+    public ImagizerUrl addParam(String key, double value) {
         params.put(key, value);
 
         return this;
@@ -85,11 +104,20 @@ public class ImagizerUrl {
      */
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        DecimalFormat format = new DecimalFormat("0.#");
 
         sb.append(this.useHttps ? "https" : "http");
         sb.append("://");
         sb.append(host);
         sb.append(this.cleanPath(this.path));
+
+        if (!this.params.containsKey("dpr") && this.dpr != null && !this.dpr.equals(ImagizerClient.DEFAULT_DPR)) {
+            this.params.put("dpr", this.dpr);
+        }
+
+        if (!this.params.containsKey("quality") && this.quality != null) {
+            this.params.put("quality", this.quality);
+        }
 
         if (this.params.size() > 0) {
 
@@ -103,7 +131,12 @@ public class ImagizerUrl {
 
                 sb.append(param.getKey());
                 sb.append("=");
-                sb.append(param.getValue().toString());
+
+                if (param.getKey().equals("dpr")) {
+                    sb.append(format.format(param.getValue()));
+                } else {
+                    sb.append(param.getValue().toString());
+                }
 
                 i++;
             }
@@ -118,5 +151,81 @@ public class ImagizerUrl {
         }
 
         return path;
+    }
+
+    /**
+     * Returns the hostname to the Imagizer Instance
+     *
+     * @return host the Imagizer instance hostname
+     */
+    public String getHost() {
+        return host;
+    }
+
+    /**
+     * Set the hostname
+     *
+     * @param host the Imagizer instance hostname
+     */
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    /**
+     * Returns true if using https
+     *
+     * @return useHttps whether using https or not
+     */
+    public Boolean isUseHttps() {
+        return useHttps;
+    }
+
+    /**
+     * Sets whether using https
+     *
+     * @param useHttps whether using https or not
+     */
+    public void setUseHttps(Boolean useHttps) {
+        this.useHttps = useHttps;
+    }
+
+    /**
+     * Returns the current default device pixel ratio
+     *
+     * @return dpr the device pixel ratio
+     */
+    public Double getDpr() {
+        return dpr;
+    }
+
+    /**
+     * Set the default device pixel ratio
+     *
+     * @param dpr the device pixel ratio. Default is 1.0
+     */
+    public void setDpr(Double dpr) {
+        this.dpr = dpr;
+    }
+
+    /**
+     * Returns the current default image quality compression
+     * @return quality the default quality compression
+     */
+    public int getQuality() {
+        return quality;
+    }
+
+    /**
+     * Set the default image quality compression
+     *
+     * @param quality the default quality compression 0 - 100.
+     *                Default is 90
+     */
+    public void setQuality(Integer quality) {
+        if (quality == null || quality > 100 || quality < 0) {
+            return;
+        }
+
+        this.quality = quality;
     }
 }

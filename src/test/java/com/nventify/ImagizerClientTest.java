@@ -13,7 +13,7 @@ public class ImagizerClientTest extends TestCase {
         ImagizerClient client = new ImagizerClient("example.com");
         String url = client.buildUrl("image.jpg").toString();
 
-        assertEquals(url, "http://example.com/image.jpg");
+        assertEquals("http://example.com/image.jpg", url);
     }
 
     public void testBuildUrlWithAddParams() throws Exception {
@@ -38,5 +38,61 @@ public class ImagizerClientTest extends TestCase {
         ImagizerUrl imagizerUrl = client.buildUrl("image.jpg", params);
 
         assertEquals("http://example.com/image.jpg?height=400&width=200", imagizerUrl.toString());
+    }
+
+    public void testBuildUrlWithQuality() throws Exception  {
+        ImagizerClient client = new ImagizerClient("example.com");
+
+        String url = client.buildUrl("image.jpg")
+                .addParam("quality", 100)
+                .toString();
+
+        assertEquals("http://example.com/image.jpg?quality=100", url);
+    }
+
+    public void testBuildUrlWithGlobalQuality() throws Exception  {
+        ImagizerClient client = new ImagizerClient("example.com");
+        client.setQuality(100);
+
+        String url = client.buildUrl("image.jpg").toString();
+
+        assertEquals("http://example.com/image.jpg?quality=100", url);
+    }
+
+    public void testBuildUrlWithGlobalQualityOverride() throws Exception  {
+        ImagizerClient client = new ImagizerClient("example.com");
+        client.setQuality(100);
+
+        String url = client.buildUrl("image.jpg").addParam("quality", 99).toString();
+
+        assertEquals("http://example.com/image.jpg?quality=99", url);
+    }
+
+    public void testBuildUrlWithDpr() throws Exception  {
+        ImagizerClient client = new ImagizerClient("example.com");
+
+        String url = client.buildUrl("image.jpg")
+                .addParam("dpr", 2)
+                .toString();
+
+        assertEquals("http://example.com/image.jpg?dpr=2", url);
+    }
+
+    public void testBuildUrlWithGlobalDpr() throws Exception  {
+        ImagizerClient client = new ImagizerClient("example.com");
+        client.setDpr(2);
+
+        String url = client.buildUrl("image.jpg").toString();
+
+        assertEquals("http://example.com/image.jpg?dpr=2", url);
+    }
+
+    public void testBuildUrlWithGlobalDprOverride() throws Exception  {
+        ImagizerClient client = new ImagizerClient("example.com");
+        client.setDpr(2);
+
+        String url = client.buildUrl("image.jpg").addParam("dpr", 2.3).toString();
+
+        assertEquals("http://example.com/image.jpg?dpr=2.3", url);
     }
 }
