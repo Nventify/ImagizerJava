@@ -113,7 +113,7 @@ public class ImagizerUrl {
     }
 
     private String cleanPath(String path) {
-        if (!path.matches("^/")) {
+        if (!path.startsWith("/")) {
             path = "/" + path;
         }
 
