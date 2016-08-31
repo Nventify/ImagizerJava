@@ -107,8 +107,6 @@ public class ImagizerUrl {
 
                 i++;
             }
-
-            this.params.clear();
         }
 
         return sb.toString();
