@@ -8,16 +8,16 @@ import java.util.TreeMap;
  * Created by Nicholas Pettas on 8/24/16.
  */
 public class ImagizerUrl {
-    private String host;
-    private Boolean useHttps = false;
-    private String path;
-    private Map<String, Object> params = new TreeMap<String, Object>();
+    protected String host;
+    protected Boolean useHttps = false;
+    protected String path;
+    protected Map<String, Object> params = new TreeMap<String, Object>();
 
     /* the default device pixel density */
-    private Double dpr;
+    protected Double dpr;
 
     /* the default image quality compression to use */
-    private Integer quality;
+    protected Integer quality;
 
     /**
      * Construct Imagizer URL
@@ -120,7 +120,6 @@ public class ImagizerUrl {
         }
 
         if (this.params.size() > 0) {
-
             int i = 0;
             for (Map.Entry<String, Object> param : this.params.entrySet()) {
                 if (i == 0) {
@@ -145,7 +144,7 @@ public class ImagizerUrl {
         return sb.toString();
     }
 
-    private String cleanPath(String path) {
+    protected String cleanPath(String path) {
         if (!path.startsWith("/")) {
             path = "/" + path;
         }

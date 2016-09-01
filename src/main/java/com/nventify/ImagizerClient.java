@@ -9,16 +9,16 @@ public class ImagizerClient {
     public final static int DEFAULT_QUALITY = 90;
     public final static Double DEFAULT_DPR = 1.0;
 
-    private String host;
+    protected String host;
 
     /* use https connection to Imagizer instance */
-    private Boolean useHttps = false;
+    protected Boolean useHttps = false;
 
     /* the default device pixel density */
-    private Double dpr = DEFAULT_DPR;
+    protected Double dpr = DEFAULT_DPR;
 
     /* the default image quality compression to use */
-    private Integer quality;
+    protected Integer quality;
 
     /**
      * Initialize Imagizer client
