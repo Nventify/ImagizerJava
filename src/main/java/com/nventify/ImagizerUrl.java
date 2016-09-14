@@ -13,6 +13,9 @@ public class ImagizerUrl {
     protected String path;
     protected Map<String, Object> params = new TreeMap<String, Object>();
 
+    /* hostname of the origin image storage server */
+    protected String originHost;
+
     /* the default device pixel density */
     protected Double dpr;
 
@@ -110,6 +113,10 @@ public class ImagizerUrl {
         sb.append("://");
         sb.append(host);
         sb.append(this.cleanPath(this.path));
+
+        if (this.originHost != null) {
+            this.params.put("hostname", this.originHost);
+        }
 
         if (!this.params.containsKey("dpr") && this.dpr != null && !this.dpr.equals(ImagizerClient.DEFAULT_DPR)) {
             this.params.put("dpr", this.dpr);
@@ -226,5 +233,22 @@ public class ImagizerUrl {
         }
 
         this.quality = quality;
+    }
+
+    /**
+     * Returns the origin image storage hostname
+     * @return the origin image storage hostname
+     */
+    public String getOriginHost() {
+        return originHost;
+    }
+
+    /**
+     * Sets the origin image storage host
+     *
+     * @param originHost the origin image storage hostname
+     */
+    public void setOriginHost(String originHost) {
+        this.originHost = originHost;
     }
 }

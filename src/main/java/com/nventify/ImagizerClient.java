@@ -8,8 +8,17 @@ import java.util.Map;
 public class ImagizerClient {
     public final static int DEFAULT_QUALITY = 90;
     public final static Double DEFAULT_DPR = 1.0;
+    private final static String DEFAULT_IMAGIZER_HOST = "demo.imagizercdn.com";
 
-    protected String host;
+    /* hostname of the imagizer instance */
+    protected String imagizerHost;
+
+    /*
+    hostname of the origin image storage server
+    this is optional if using a self service Imagizer instance.
+    Required when using Imagizer's demo service
+    */
+    protected String originHost;
 
     /* use https connection to Imagizer instance */
     protected Boolean useHttps = false;
@@ -21,12 +30,19 @@ public class ImagizerClient {
     protected Integer quality;
 
     /**
+     * Initialize Imagizer client with default imagizer demo host
+     */
+    public ImagizerClient() {
+        this.imagizerHost = DEFAULT_IMAGIZER_HOST;
+    }
+
+    /**
      * Initialize Imagizer client
      *
      * @param host the hostname to the Imagizer instance
      */
     public ImagizerClient(String host) {
-        this.host = host;
+        this.imagizerHost = host;
     }
 
     /**
@@ -36,7 +52,7 @@ public class ImagizerClient {
      * @param useHttps whether to use https for the connection
      */
     public ImagizerClient(String host, Boolean useHttps) {
-        this.host = host;
+        this.imagizerHost = host;
         this.useHttps = useHttps;
     }
 
@@ -47,9 +63,10 @@ public class ImagizerClient {
      * @return ImagizerUrl
      */
     public ImagizerUrl buildUrl(String path) {
-        ImagizerUrl imagizerUrl = new ImagizerUrl(host, useHttps, path);
+        ImagizerUrl imagizerUrl = new ImagizerUrl(imagizerHost, useHttps, path);
         imagizerUrl.setDpr(this.dpr);
         imagizerUrl.setQuality(this.quality);
+        imagizerUrl.setOriginHost(this.originHost);
         return imagizerUrl;
     }
 
@@ -61,7 +78,7 @@ public class ImagizerClient {
      * @return ImagizerUrl
      */
     public ImagizerUrl buildUrl(String path, Map<String, Object> params) {
-        ImagizerUrl url = new ImagizerUrl(host, useHttps, path);
+        ImagizerUrl url = new ImagizerUrl(imagizerHost, useHttps, path);
         url.addParams(params);
 
         return url;
@@ -72,8 +89,8 @@ public class ImagizerClient {
      *
      * @return host the Imagizer instance hostname
      */
-    public String getHost() {
-        return host;
+    public String getImagizerHost() {
+        return imagizerHost;
     }
 
     /**
@@ -81,8 +98,8 @@ public class ImagizerClient {
      *
      * @param host the Imagizer instance hostname
      */
-    public void setHost(String host) {
-        this.host = host;
+    public void setImagizerHost(String host) {
+        this.imagizerHost = host;
     }
 
     /**
@@ -151,5 +168,22 @@ public class ImagizerClient {
         }
 
         this.quality = quality;
+    }
+
+    /**
+     * Returns the origin image storage hostname
+     * @return the origin image storage hostname
+     */
+    public String getOriginHost() {
+        return originHost;
+    }
+
+    /**
+     * Sets the origin image storage host
+     *
+     * @param originHost the origin image storage hostname
+     */
+    public void setOriginHost(String originHost) {
+        this.originHost = originHost;
     }
 }

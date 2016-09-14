@@ -9,6 +9,22 @@ import java.util.HashMap;
  */
 public class ImagizerClientTest extends TestCase {
 
+    public void testBuildUrlWithDefaultDemoHost() {
+        ImagizerClient client = new ImagizerClient();
+        String url = client.buildUrl("image.jpg").toString();
+
+        assertEquals("http://demo.imagizercdn.com/image.jpg", url);
+    }
+
+    public void testBuildUrlWithDefaultDemoHostAndOriginHostSpecified() {
+        ImagizerClient client = new ImagizerClient();
+        client.setOriginHost("http://example.com");
+
+        String url = client.buildUrl("image.jpg").toString();
+
+        assertEquals("http://demo.imagizercdn.com/image.jpg?hostname=http://example.com", url);
+    }
+
     public void testBuildUrl() {
         ImagizerClient client = new ImagizerClient("example.com");
         String url = client.buildUrl("image.jpg").toString();
