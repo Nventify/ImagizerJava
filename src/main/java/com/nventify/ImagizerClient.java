@@ -78,10 +78,13 @@ public class ImagizerClient {
      * @return ImagizerUrl
      */
     public ImagizerUrl buildUrl(String path, Map<String, Object> params) {
-        ImagizerUrl url = new ImagizerUrl(imagizerHost, useHttps, path);
-        url.addParams(params);
+        ImagizerUrl imagizerUrl = new ImagizerUrl(imagizerHost, useHttps, path);
+        imagizerUrl.addParams(params);
+        imagizerUrl.setDpr(this.dpr);
+        imagizerUrl.setQuality(this.quality);
+        imagizerUrl.setOriginHost(this.originHost);
 
-        return url;
+        return imagizerUrl;
     }
 
     /**

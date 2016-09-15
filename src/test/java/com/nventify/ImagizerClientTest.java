@@ -9,28 +9,20 @@ import java.util.HashMap;
  */
 public class ImagizerClientTest extends TestCase {
 
-    public void testBuildUrlWithDefaultDemoHost() {
-        ImagizerClient client = new ImagizerClient();
-        String url = client.buildUrl("image.jpg").toString();
-
-        assertEquals("http://demo.imagizercdn.com/image.jpg", url);
-    }
-
-    public void testBuildUrlWithDefaultDemoHostAndOriginHostSpecified() {
-        ImagizerClient client = new ImagizerClient();
-        client.setOriginHost("http://example.com");
-
-        String url = client.buildUrl("image.jpg").toString();
-
-        assertEquals("http://demo.imagizercdn.com/image.jpg?hostname=http://example.com", url);
-    }
-
     public void testBuildUrl() {
         ImagizerClient client = new ImagizerClient("example.com");
         String url = client.buildUrl("image.jpg").toString();
 
         assertEquals("http://example.com/image.jpg", url);
     }
+
+    public void testBuildUrlWithSlash() {
+        ImagizerClient client = new ImagizerClient("example.com");
+        String url = client.buildUrl("/image.jpg").toString();
+
+        assertEquals("http://example.com/image.jpg", url);
+    }
+
 
     public void testBuildUrlWithAddParams() throws Exception {
         ImagizerClient client = new ImagizerClient("example.com");
@@ -110,5 +102,112 @@ public class ImagizerClientTest extends TestCase {
         String url = client.buildUrl("image.jpg").addParam("dpr", 2.3).toString();
 
         assertEquals("http://example.com/image.jpg?dpr=2.3", url);
+    }
+
+
+    public void testBuildUrlWithDefaultDemoHost() {
+        ImagizerClient client = new ImagizerClient();
+        client.setOriginHost("example.com");
+
+        String url = client.buildUrl("image.jpg").toString();
+
+        assertEquals("http://demo.imagizercdn.com/image.jpg?hostname=example.com", url);
+    }
+
+    public void testBuildUrlWithDefaultDemoHostAndOriginHostSpecified() {
+        ImagizerClient client = new ImagizerClient();
+        client.setOriginHost("example.com");
+
+        String url = client.buildUrl("image.jpg").toString();
+
+        assertEquals("http://demo.imagizercdn.com/image.jpg?hostname=example.com", url);
+    }
+
+    public void testBuildUrlWithAddParamsWithDefaultDemoHostAndOriginHostSpecified() throws Exception {
+        ImagizerClient client = new ImagizerClient();
+        client.setOriginHost("example.com");
+
+        String url = client.buildUrl("image.jpg")
+                .addParam("width", 200)
+                .addParam("height", 400)
+                .addParam("crop", "fit")
+                .toString();
+
+        assertEquals("http://demo.imagizercdn.com/image.jpg?crop=fit&height=400&hostname=example.com&width=200", url);
+    }
+
+    public void testBuildUrlWithHashMapWithDefaultDemoHostAndOriginHostSpecified() throws Exception {
+        ImagizerClient client = new ImagizerClient();
+        client.setOriginHost("example.com");
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("width", 200);
+        params.put("height", 400);
+
+        ImagizerUrl imagizerUrl = client.buildUrl("image.jpg", params);
+
+        assertEquals("http://demo.imagizercdn.com/image.jpg?height=400&hostname=example.com&width=200", imagizerUrl.toString());
+    }
+
+    public void testBuildUrlWithQualityWithDefaultDemoHostAndOriginHostSpecified() throws Exception  {
+        ImagizerClient client = new ImagizerClient();
+        client.setOriginHost("example.com");
+
+        String url = client.buildUrl("image.jpg")
+                .addParam("quality", 100)
+                .toString();
+
+        assertEquals("http://demo.imagizercdn.com/image.jpg?hostname=example.com&quality=100", url);
+    }
+
+    public void testBuildUrlWithGlobalQualityWithDefaultDemoHostAndOriginHostSpecified() throws Exception  {
+        ImagizerClient client = new ImagizerClient();
+        client.setOriginHost("example.com");
+        client.setQuality(100);
+
+        String url = client.buildUrl("image.jpg").toString();
+
+        assertEquals("http://demo.imagizercdn.com/image.jpg?hostname=example.com&quality=100", url);
+    }
+
+    public void testBuildUrlWithGlobalQualityOverrideWithDefaultDemoHostAndOriginHostSpecified() throws Exception  {
+        ImagizerClient client = new ImagizerClient();
+        client.setOriginHost("example.com");
+        client.setQuality(100);
+
+        String url = client.buildUrl("image.jpg").addParam("quality", 99).toString();
+
+        assertEquals("http://demo.imagizercdn.com/image.jpg?hostname=example.com&quality=99", url);
+    }
+
+    public void testBuildUrlWithDprWithDefaultDemoHostAndOriginHostSpecified() throws Exception  {
+        ImagizerClient client = new ImagizerClient();
+        client.setOriginHost("example.com");
+
+        String url = client.buildUrl("image.jpg")
+                .addParam("dpr", 2)
+                .toString();
+
+        assertEquals("http://demo.imagizercdn.com/image.jpg?dpr=2&hostname=example.com", url);
+    }
+
+    public void testBuildUrlWithGlobalDprWithDefaultDemoHostAndOriginHostSpecified() throws Exception  {
+        ImagizerClient client = new ImagizerClient();
+        client.setOriginHost("example.com");
+        client.setDpr(2);
+
+        String url = client.buildUrl("image.jpg").toString();
+
+        assertEquals("http://demo.imagizercdn.com/image.jpg?dpr=2&hostname=example.com", url);
+    }
+
+    public void testBuildUrlWithGlobalDprOverrideWithDefaultDemoHostAndOriginHostSpecified() throws Exception  {
+        ImagizerClient client = new ImagizerClient();
+        client.setOriginHost("example.com");
+        client.setDpr(2);
+
+        String url = client.buildUrl("image.jpg").addParam("dpr", 2.3).toString();
+
+        assertEquals("http://demo.imagizercdn.com/image.jpg?dpr=2.3&hostname=example.com", url);
     }
 }
