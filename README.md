@@ -1,5 +1,8 @@
 # Imagizer Java Client
-The official Java client for the Imagizer Media Engine for generating Imagizer URLs. Imagizer Media Engine is a blazing fast dynamic image processing soloution. More infomation can be found at [nventify.com](http://nventify.com).
+
+The official Java client for the Imagizer Media Engine.
+
+The Imagizer Media Engine accelerates media delivery to your mobile Apps or Webpages by dynamically rescaling, cropping, and compressing images in real time. See all Imagizer features in our [doc](demo.imagizercdn.com/doc).
 
 ## Install from JCenter or Maven
 ```gradle
