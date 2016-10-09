@@ -2,7 +2,7 @@
 
 The official Java client for the Imagizer Media Engine.
 
-The Imagizer Media Engine accelerates media delivery to your mobile Apps or Webpages by dynamically rescaling, cropping, and compressing images in real time. See all Imagizer features in our [doc](demo.imagizercdn.com/doc).
+The Imagizer Media Engine accelerates media delivery to your mobile Apps or Webpages by dynamically rescaling, cropping, and compressing images in real time. See all Imagizer features in our [doc](http://demo.imagizercdn.com/doc).
 
 ## Install from JCenter or Maven
 ```gradle
@@ -22,7 +22,7 @@ gradle test
 ```
 
 ## Basic Usage
-Using the free to test Imagizer Demo Service 
+Using the free to test Imagizer Demo Service
 ```java
 import com.nventify.ImagizerClient;
 
